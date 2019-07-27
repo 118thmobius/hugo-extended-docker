@@ -9,6 +9,7 @@ RUN git clone ${HUGO_URL} -b v${HUGO_VERSION} --depth 1 /hugo && \
 
 
 FROM golang:1.12.7-buster
+
 COPY --from=builder /go/bin/hugo /go/bin/hugo
 
 WORKDIR /src
