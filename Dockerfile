@@ -1,17 +1,16 @@
 FROM golang:1.12.7-buster AS builder
 
-ENV HUGO_VERSION='0.56.1'
-ENV HUGO_URL='https://github.com/gohugoio/hugo.git'
-
-RUN git clone ${HUGO_URL} -b v${HUGO_VERSION} --depth 1 /hugo && \
-    cd /hugo && \
-    go install --tags extended
+ENV HUGO_VERSION='0.56.2'
+ENV HUGO_NAME="hugo_extended_${HUGO_VERSION}_Linux-64bit"
+ENV HUGO_URL="https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/${HUGO_NAME}.tar.gz"
+WORKDIR /hugo
+RUN wget "${HUGO_URL}" && \
+    tar -zxvf "${HUGO_NAME}.tar.gz"
 
 
 FROM golang:1.12.7-buster
 
-COPY --from=builder /go/bin/hugo /go/bin/hugo
-
+COPY --from=builder /hugo/hugo /go/bin/hugo
 WORKDIR /src
 COPY entrypoint.sh /entrypoint.sh
 
