@@ -33,7 +33,7 @@ jobs:
 
     - name: Build golang image
       run: |
-        docker build . -t "${LATEST_MOD}" --build-arg BASE_IMAGE=golang:1.13-alpine3.10"
+        docker build . -t "${LATEST_MOD}" --build-arg BASE_IMAGE=golang:1.13-alpine3.10
 
     - name: Print Hugo version
       run: |

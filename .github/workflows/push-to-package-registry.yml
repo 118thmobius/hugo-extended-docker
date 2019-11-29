@@ -43,7 +43,7 @@ jobs:
 
     - name: Build golang image
       run: |
-        docker build . -t "${PKG_LATEST_MOD} --build-arg BASE_IMAGE=golang:1.13-alpine3.10"
+        docker build . -t "${PKG_LATEST_MOD}" --build-arg BASE_IMAGE=golang:1.13-alpine3.10
         docker tag "${PKG_LATEST_MOD}" "${PKG_TAG_MOD}"
         docker tag "${PKG_LATEST_MOD}" "${HUB_LATEST_MOD}"
         docker tag "${PKG_LATEST_MOD}" "${HUB_TAG_MOD}"
