@@ -6,6 +6,7 @@ on:
 
 env:
   DOCKER_BASE_NAME: docker.pkg.github.com/${{ github.repository }}
+  DOCKER_HUB_BASE_NAME: peaceiris/hugo
 
 jobs:
 
@@ -28,30 +29,44 @@ jobs:
         echo "::set-env name=PKG_LATEST_MOD::${DOCKER_BASE_NAME}/latest-mod:latest"
         echo "::set-env name=PKG_TAG::${DOCKER_BASE_NAME}/${{ github.event.release.tag_name }}:latest"
         echo "::set-env name=PKG_TAG_MOD::${DOCKER_BASE_NAME}/${{ github.event.release.tag_name }}-mod:latest"
+        echo "::set-env name=HUB_LATEST::${DOCKER_HUB_BASE_NAME}:latest"
+        echo "::set-env name=HUB_LATEST_MOD::${DOCKER_HUB_BASE_NAME}:latest-mod"
+        echo "::set-env name=HUB_TAG::${DOCKER_HUB_BASE_NAME}:${{ github.event.release.tag_name }}"
+        echo "::set-env name=HUB_TAG_MOD::${DOCKER_HUB_BASE_NAME}:${{ github.event.release.tag_name }}-mod"
 
     - name: Build alpine image
       run: |
-        docker build . --file Dockerfile.alpine --tag "${PKG_LATEST}"
+        docker build . -t "${PKG_LATEST}"
         docker tag "${PKG_LATEST}" "${PKG_TAG}"
+        docker tag "${PKG_LATEST}" "${HUB_LATEST}"
+        docker tag "${PKG_LATEST}" "${HUB_TAG}"
 
     - name: Build golang image
       run: |
-        docker build . --file Dockerfile.golang --tag "${PKG_LATEST_MOD}"
+        docker build . -t "${PKG_LATEST_MOD} --build-arg BASE_IMAGE=golang:1.13-alpine3.10"
         docker tag "${PKG_LATEST_MOD}" "${PKG_TAG_MOD}"
+        docker tag "${PKG_LATEST_MOD}" "${HUB_LATEST_MOD}"
+        docker tag "${PKG_LATEST_MOD}" "${HUB_TAG_MOD}"
 
-    - name: Login to Package Registry
+    - name: Login to Registries
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
       run: |
         echo "${GITHUB_TOKEN}" | docker login docker.pkg.github.com -u peaceiris --password-stdin
+        echo "${DOCKER_HUB_TOKEN}" | docker login -u peaceiris --password-stdin
 
     - name: Push latest
       if: github.event.release.prerelease	== false
       run: |
         docker push "${PKG_LATEST}"
         docker push "${PKG_LATEST_MOD}"
+        docker push "${HUB_LATEST}"
+        docker push "${HUB_LATEST_MOD}"
 
     - name: Push tag
       run: |
         docker push "${PKG_TAG}"
         docker push "${PKG_TAG_MOD}"
+        docker push "${HUB_TAG}"
+        docker push "${HUB_TAG_MOD}"

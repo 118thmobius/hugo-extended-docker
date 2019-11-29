@@ -1,4 +1,5 @@
-FROM alpine:3.10
+ARG BASE_IMAGE=alpine:3.10
+FROM $BASE_IMAGE
 
 ENV HUGO_VERSION='0.59.1'
 ENV HUGO_NAME="hugo_extended_${HUGO_VERSION}_Linux-64bit"
