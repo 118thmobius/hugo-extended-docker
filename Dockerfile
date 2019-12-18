@@ -10,7 +10,8 @@ ENV HUGO_CHECKSUM_URL="${HUGO_BASE_URL}/v${HUGO_VERSION}/hugo_${HUGO_VERSION}_ch
 
 WORKDIR /hugo
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
-RUN apk add --no-cache --virtual .build-deps wget && \
+RUN apk update && \
+    apk add --no-cache --virtual .build-deps wget && \
     apk add --no-cache \
     git \
     ca-certificates \
