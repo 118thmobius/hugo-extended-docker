@@ -12,7 +12,6 @@ SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 RUN apk update && \
     apk add --no-cache --virtual .build-deps wget && \
     apk add --no-cache \
-    git \
     ca-certificates \
     libc6-compat \
     libstdc++ && \
