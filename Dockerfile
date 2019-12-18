@@ -1,5 +1,4 @@
-ARG BASE_IMAGE
-FROM $BASE_IMAGE
+FROM abiosoft/caddy
 
 ARG HUGO_VERSION
 ENV HUGO_VERSION ${HUGO_VERSION:-0.61.0}
@@ -25,5 +24,4 @@ RUN apk update && \
     apk del .build-deps && \
     rm -rf /hugo
 
-WORKDIR /src
-ENTRYPOINT [ "/usr/bin/hugo" ]
+WORKDIR /srv
