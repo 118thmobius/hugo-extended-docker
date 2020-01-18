@@ -5,7 +5,7 @@ on:
   #   branches:
   #     - master
   schedule:
-    - cron: '13 13 */31 * *'
+    - cron: '13 13 */8 * *'
 
 env:
   DOCKER_BASE_NAME: docker.pkg.github.com/${{ github.repository }}/hugo
@@ -17,13 +17,11 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
       matrix:
-        baseimage: ['alpine:3.10', 'golang:1.13-alpine3.10']
-        version: ['0.61.0', '0.60.1', '0.59.1', '0.58.3', '0.57.2', '0.56.3']
+        baseimage: ['alpine:3.11', 'golang:1.13-alpine3.11']
+        version: ['0.62.2', '0.61.0', '0.60.1', '0.59.1', '0.58.3', '0.57.2', '0.56.3']
     steps:
 
-    - uses: actions/checkout@v1
-      with:
-        fetch-depth: 1
+    - uses: actions/checkout@v2
 
     - name: Set env
       run: |
