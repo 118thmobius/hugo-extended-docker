@@ -1,4 +1,4 @@
-FROM abiosoft/caddy
+FROM abiosoft/caddy:no-stats
 
 ARG HUGO_VERSION
 ENV HUGO_VERSION ${HUGO_VERSION:-0.62.2}
